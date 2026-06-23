@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Casa del Sabor – Restaurante de Cocina Tradicional</title>
+  <meta name="description" content="Descubre los sabores auténticos de Casa del Sabor. Menú, galería, reservas en línea y contacto.">
+  <meta name="keywords" content="restaurante, comida tradicional, reservas, menú, galería">
+  <link rel="canonical" href="https://www.casadelsabor.com/">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-bg: #F5F5DC;               /* beige */
+      --color-primary: #8B4513;          /* marrón oscuro */
+      --color-accent: #D2691E;           /* cobrizo */
+      --color-text: #333333;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin:0; font-family:'Open Sans',sans-serif; background:var(--color-bg); color:var(--color-text);
+      line-height:1.6;
+    }
+    a { color:var(--color-accent); text-decoration:none; }
+    a:focus { outline:3px solid var(--color-accent); outline-offset:2px; }
+    header {
+      position:fixed; top:0; left:0; right:0; background:var(--color-primary); color:#fff;
+      display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1.5rem; z-index:10;
+    }
+    header img { height:40px; }
+    nav a { margin-left:1.5rem; font-weight:600; color:#fff; }
+    nav a:hover, nav a:focus { color:var(--color-accent); }
+    main { padding-top:80px; }
+    .hero {
+      position:relative; height:70vh; overflow:hidden;
+    }
+    .hero img {
+      width:100%; height:100%; object-fit:cover; transition:transform .6s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero img { transition:none; }
+    }
+    .hero .overlay {
+      position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; flex-direction:column;
+      align-items:center; justify-content:center; text-align:center; color:#fff; padding:1rem;
+    }
+    .hero h1 {
+      font-family:'Playfair Display',serif; font-size:2.8rem; margin:0;
+    }
+    .hero p {
+      font-size:1.2rem; margin-top:0.5rem;
+    }
+    .btn {
+      display:inline-block; padding:0.6rem 1.2rem; background:var(--color-accent); color:#fff;
+      border:none; border-radius:4px; cursor:pointer; font-weight:600; margin-top:1rem;
+    }
+    .btn:hover, .btn:focus { background:#b75a1c; }
+    /* Carousel controls */
+    .carousel {
+      position:relative;
+    }
+    .carousel button {
+      position:absolute; top:50%; transform:translateY(-50%);
+      background:rgba(0,0,0,0.5); border:none; color:#fff; font-size:2rem; padding:0.2rem 0.6rem;
+      cursor:pointer;
+    }
+    .carousel button:focus { outline:3px solid var(--color-accent); }
+    .carousel .prev { left:1rem; }
+    .carousel .next { right:1rem; }
+    /* Menú */
+    .section { padding:3rem 1.5rem; }
+    .section h2 { font-family:'Playfair Display',serif; font-size:2.2rem; text-align:center; margin-bottom:2rem; color:var(--color-primary); }
+    .menu-grid {
+      display:grid; gap:1.5rem;
+      grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .card {
+      background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      display:flex; flex-direction:column;
+    }
+    .card img {
+      width:100%; height:180px; object-fit:cover;
+    }
+    .card-body {
+      flex:1; padding:1rem;
+    }
+    .card-body h3 {
+      margin:0; font-size:1.2rem; font-weight:600; color:var(--color-primary);
+    }
+    .card-body p { margin:0.5rem 0; font-size:0.9rem; color:#555; }
+    .price {
+      font-weight:600; color:var(--color-accent); float:right;
+    }
+    .card-body .details {
+      margin-top:0.8rem; text-align:right;
+    }
+    .card-body .details a { font-size:0.9rem; }
+    /* Galería */
+    .gallery {
+      display:grid; gap:0.8rem;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .gallery img {
+      width:100%; height:150px; object-fit:cover; border-radius:6px; transition:transform .3s;
+    }
+    .gallery img:hover, .gallery img:focus {
+      transform:scale(1.05);
+    }
+    /* Reserva */
+    .form-group { margin-bottom:1rem; }
+    .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline:none; border-color:var(--color-accent);
+    }
+    .reservation-success {
+      background:#e6f4ea; border:1px solid #b2d8c2; color:#2e7d32; padding:1rem; border-radius:6px;
+      margin-top:1rem; display:none;
+    }
+    /* Footer */
+    footer {
+      background:var(--color-primary); color:#fff; padding:2rem 1.5rem;
+    }
+    .footer-grid {
+      display:grid; gap:1.5rem;
+      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    }
+    .footer-grid a { color:#fff; }
+    .social-icons a { margin-right:0.8rem; font-size:1.4rem; }
+    @media (max-width:600px) {
+      .hero h1 { font-size:2rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://via.placeholder.com/120x40?text=Logo" alt="Logo Casa del Sabor">
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#menu">Menú</a>
+      <a href="#galeria">Galería</a>
+      <a href="#reserva">Reserva</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO / CAROUSEL -->
+    <section id="inicio" class="hero carousel">
+      <img src="https://images.unsplash.com/photo-1555992336-03a23c5c9c3e?auto=format&fit=crop&w=1600&q=80" alt="Interior del restaurante">
+      <div class="overlay">
+        <h1>Casa del Sabor</h1>
+        <p>Tradición y pasión en cada plato</p>
+        <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'});">Ver Menú</button>
+      </div>
+      <button class="prev" aria-label="Imagen anterior" onclick="prevSlide()">&#9664;</button>
+      <button class="next" aria-label="Imagen siguiente" onclick="nextSlide()">&#9658;</button>
+    </section>
+
+    <!-- MENÚ -->
+    <section id="menu" class="section">
+      <h2>Nuestro Menú</h2>
+      <div class="menu-grid">
+        <!-- Entrantes -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80" alt="Ensalada de tomate">
+          <div class="card-body">
+            <h3>Ensalada de Tomate <span class="price">8,50 €</span></h3>
+            <p>Tomates frescos, albahaca, aceite de oliva virgen extra.</p>
+            <div class="details"><a href="#" class="btn">Ver más</a></div>
+          </div>
+        </article>
+        <!-- Principales -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=400&q=80" alt="Filete a la parrilla">
+          <div class="card-body">
+            <h3>Filete a la Parrilla <span class="price">22,00 €</span></h3>
+            <p>Carne de res de primera, acompañada de verduras asadas.</p>
+            <div class="details"><a href="#" class="btn">Ver más</a></div>
+          </div>
+        </article>
+        <!-- Postres -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1551022377-2f5c5c2e5c2b?auto=format&fit=crop&w=400&q=80" alt="Tarta de queso">
+          <div class="card-body">
+            <h3>Tarta de Queso <span class="price">7,00 €</span></h3>
+            <p>Crema ligera sobre base de galleta, toque de frutos rojos.</p>
+            <div class="details"><a href="#" class="btn">Ver más</a></div>
+          </div>
+        </article>
+        <!-- Bebidas -->
+        <article class="card">
+          <img src="https://images.unsplash.com/photo-1510626176961-4b57d4a0c8f5?auto=format&fit=crop&w=400&q=80" alt="Vino tinto">
+          <div class="card-body">
+            <h3>Vino Tinto Casa <span class="price">15,00 €</span></h3>
+            <p>Selección de la bodega local, cuerpo medio, notas frutales.</p>
+            <div class="details"><a href="#" class="btn">Ver más</a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- GALERÍA -->
+    <section id="galeria" class="section">
+      <h2>Galería</h2>
+      <div class="gallery">
+        <img src="https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=400&q=80" alt="Cocina en acción">
+        <img src="https://images.unsplash.com/photo-1541544741938-0af76a6c5c5b?auto=format&fit=crop&w=400&q=80" alt="Comensales disfrutando">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Detalle de plato">
+        <img src="https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=400&q=80" alt="Barra de vinos">
+        <img src="https://images.unsplash.com/photo-1516685304081-3e5c5c5c5c5c?auto=format&fit=crop&w=400&q=80" alt="Terraza al atardecer">
+        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Postre artesanal">
+      </div>
+    </section>
+
+    <!-- RESERVA -->
+    <section id="reserva" class="section">
+      <h2>Reserva tu Mesa</h2>
+      <form id="bookingForm" novalidate>
+        <div class="form-group">
+          <label for="date">Fecha</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+          <label for="time">Hora</label>
+          <input type="time" id="time" name="time" required>
+        </div>
+        <div class="form-group">
+          <label for="guests">Número de comensales</label>
+          <select id="guests" name="guests" required>
+            <option value="">Selecciona</option>
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" name="name" placeholder="Ej. Ana García" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Teléfono</label>
+          <input type="tel" id="phone" name="phone" placeholder="+34 600 123 456" required>
+        </div>
+        <div class="form-group">
+          <label for="requests">Petición especial</label>
+          <textarea id="requests" name="requests" rows="3" placeholder="Ej. Mesa cerca de la ventana"></textarea>
+        </div>
+        <button type="submit" class="btn">Reservar</button>
+        <div class="reservation-success" id="successMsg">
+          ¡Reserva enviada! Te hemos enviado un correo de confirmación.
+        </div>
+      </form>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="section">
+      <h2>Contacto</h2>
+      <p>¿Tienes alguna duda? Escríbenos o visítanos.</p>
+      <div style="margin:1rem 0;">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019123456789!2d-0.127758!3d51.507351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b123456789%3A0x123456789abcdef!2sCasa%20del%20Sabor!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses"
+                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+      </div>
+      <address>
+        <strong>Casa del Sabor</strong><br>
+        Calle de la Tradición 23, 28001 Madrid, España<br>
+        Tel: <a href="tel:+34912345678">+34 912 345 678</a><br>
+        Email: <a href="mailto:info@casadelsabor.com">info@casadelsabor.com</a>
+      </address>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Horario</h4>
+        <p>Lun‑Dom: 12:00 – 23:00</p>
+      </div>
+      <div>
+        <h4>Dirección</h4>
+        <p>Calle de la Tradición 23, Madrid</p>
+      </div>
+      <div class="social-icons">
+        <h4>Redes</h4>
+        <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+      </div>
+      <div>
+        <h4>Suscríbete</h4>
+        <form id="newsletterForm">
+          <input type="email" placeholder="tu@email.com" required style="padding:0.4rem; border-radius:4px; border:none;">
+          <button type="submit" class="btn" style="margin-top:0.5rem;">Suscribir</button>
+        </form>
+      </div>
+    </div>
+    <p style="text-align:center; margin-top:1rem;">© 2026 Casa del Sabor – Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Simple carousel & form scripts -->
+  <script>
+    // Carousel logic (3 images)
+    const slides = [
+      "https://images.unsplash.com/photo-1555992336-03a23c5c9c3e?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=1600&q=80",
+      "https://images.unsplash.com/photo-1516685304081-3e5c5c5c5c5c?auto=format&fit=crop&w=1600&q=80"
+    ];
+    let idx = 0;
+    const heroImg = document.querySelector('.hero img');
+
+    function showSlide(i) {
+      idx = (i + slides.length) % slides.length;
+      heroImg.src = slides[idx];
+    }
+    function nextSlide() { showSlide(idx + 1); }
+    function prevSlide() { showSlide(idx - 1); }
+
+    // Auto‑play (respect prefers‑reduced‑motion)
+    if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+      setInterval(nextSlide, 8000);
+    }
+
+    // Reserva form – simulación de envío
+    const form = document.getElementById('bookingForm');
+    const successMsg = document.getElementById('successMsg');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      // Aquí se enviaría a la API; simulamos respuesta OK
+      successMsg.style.display = 'block';
+      form.reset();
+    });
+
+    // Newsletter (solo muestra alerta)
+    document.getElementById('newsletterForm').addEventListener('submit', e => {
+      e.preventDefault();
+      alert('¡Gracias por suscribirte!');
+    });
+  </script>
+  <!-- Font Awesome (solo para íconos) -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
