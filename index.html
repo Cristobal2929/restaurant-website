@@ -1,350 +1,322 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Casa del Sabor – Restaurante de Cocina Tradicional</title>
-  <meta name="description" content="Descubre los sabores auténticos de Casa del Sabor. Menú, galería, reservas en línea y contacto.">
-  <meta name="keywords" content="restaurante, comida tradicional, reservas, menú, galería">
-  <link rel="canonical" href="https://www.casadelsabor.com/">
+  <!-- SEO -->
+  <title>Restaurante XYZ – Cocina mediterránea con ingredientes locales</title>
+  <meta name="description" content="Descubre la carta de Restaurante XYZ, platos mediterráneos, reservas online y ubicación en el corazón de la ciudad.">
+  <meta name="keywords" content="restaurante, mediterráneo, reservas, menú, comida, Barcelona">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-sA+e2bM2Z4jzZg6J2F6VfZxJ6V4KcK3vZ6+6bZ8+0+M=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j6jVg5VZc6V6Y6Z6z6Z6z6Z6z6Z6Z6Z6Z6Z6Z6=" crossorigin=""></script>
+
   <style>
     :root {
-      --color-bg: #F5F5DC;               /* beige */
-      --color-primary: #8B4513;          /* marrón oscuro */
-      --color-accent: #D2691E;           /* cobrizo */
-      --color-text: #333333;
+      --color-bg: #fff;
+      --color-primary: #2C3E50;   /* azul oscuro */
+      --color-accent: #E74C3C;    /* rojo */
+      --color-footer: #2C3E50;
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Montserrat', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
-      margin:0; font-family:'Open Sans',sans-serif; background:var(--color-bg); color:var(--color-text);
-      line-height:1.6;
+      margin:0; font-family: var(--font-body); background: var(--color-bg);
+      color:#333; line-height:1.6;
     }
-    a { color:var(--color-accent); text-decoration:none; }
-    a:focus { outline:3px solid var(--color-accent); outline-offset:2px; }
+    a { color: var(--color-primary); text-decoration:none; }
+    a:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+    img { max-width:100%; height:auto; display:block; }
     header {
-      position:fixed; top:0; left:0; right:0; background:var(--color-primary); color:#fff;
-      display:flex; align-items:center; justify-content:space-between; padding:0.8rem 1.5rem; z-index:10;
+      position:fixed; top:0; left:0; right:0; background:rgba(255,255,255,0.95);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:0.5rem 1rem; z-index:1000; box-shadow:0 2px 4px rgba(0,0,0,.1);
     }
-    header img { height:40px; }
-    nav a { margin-left:1.5rem; font-weight:600; color:#fff; }
-    nav a:hover, nav a:focus { color:var(--color-accent); }
-    main { padding-top:80px; }
+    .logo { font-family: var(--font-display); font-size:1.5rem; color:var(--color-primary); }
+    nav ul { list-style:none; display:flex; gap:1rem; margin:0; padding:0; }
+    nav li { }
+    nav a { font-weight:500; }
+    .nav-toggle { display:none; font-size:1.5rem; background:none; border:none; cursor:pointer; }
     .hero {
-      position:relative; height:70vh; overflow:hidden;
+      height:100vh; background:url('hero.jpg') center/cover no-repeat;
+      display:flex; align-items:center; justify-content:center; position:relative;
     }
-    .hero img {
-      width:100%; height:100%; object-fit:cover; transition:transform .6s ease;
+    .hero::before {
+      content:""; position:absolute; inset:0; background:rgba(0,0,0,.4);
     }
-    @media (prefers-reduced-motion: reduce) {
-      .hero img { transition:none; }
+    .hero-content {
+      position:relative; text-align:center; color:#fff; max-width:90%;
     }
-    .hero .overlay {
-      position:absolute; inset:0; background:rgba(0,0,0,0.4); display:flex; flex-direction:column;
-      align-items:center; justify-content:center; text-align:center; color:#fff; padding:1rem;
-    }
-    .hero h1 {
-      font-family:'Playfair Display',serif; font-size:2.8rem; margin:0;
-    }
-    .hero p {
-      font-size:1.2rem; margin-top:0.5rem;
-    }
+    .hero h1 { font-family: var(--font-display); font-size:2.5rem; margin:0 0 .5rem; }
+    .hero p { font-size:1.2rem; margin:0 0 1rem; }
     .btn {
-      display:inline-block; padding:0.6rem 1.2rem; background:var(--color-accent); color:#fff;
-      border:none; border-radius:4px; cursor:pointer; font-weight:600; margin-top:1rem;
+      background:var(--color-accent); color:#fff; border:none; padding:.75rem 1.5rem;
+      font-size:1rem; cursor:pointer; border-radius:4px; transition:background .3s;
     }
-    .btn:hover, .btn:focus { background:#b75a1c; }
-    /* Carousel controls */
-    .carousel {
-      position:relative;
-    }
-    .carousel button {
-      position:absolute; top:50%; transform:translateY(-50%);
-      background:rgba(0,0,0,0.5); border:none; color:#fff; font-size:2rem; padding:0.2rem 0.6rem;
-      cursor:pointer;
-    }
-    .carousel button:focus { outline:3px solid var(--color-accent); }
-    .carousel .prev { left:1rem; }
-    .carousel .next { right:1rem; }
-    /* Menú */
-    .section { padding:3rem 1.5rem; }
-    .section h2 { font-family:'Playfair Display',serif; font-size:2.2rem; text-align:center; margin-bottom:2rem; color:var(--color-primary); }
+    .btn:hover, .btn:focus-visible { background:#c0392b; }
+    section { padding:4rem 1rem; max-width:1200px; margin:auto; }
+    h2 { font-family: var(--font-display); color:var(--color-primary); font-size:2rem; margin-bottom:1rem; }
+    .about { display:flex; flex-wrap:wrap; gap:2rem; align-items:center; }
+    .about img { flex:1 1 300px; border-radius:8px; }
+    .about .text { flex:1 1 300px; }
     .menu-grid {
       display:grid; gap:1.5rem;
       grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));
     }
     .card {
-      background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      display:flex; flex-direction:column;
+      border:1px solid #e0e0e0; border-radius:8px; overflow:hidden;
+      display:flex; flex-direction:column; background:#fafafa;
     }
-    .card img {
-      width:100%; height:180px; object-fit:cover;
-    }
-    .card-body {
-      flex:1; padding:1rem;
-    }
-    .card-body h3 {
-      margin:0; font-size:1.2rem; font-weight:600; color:var(--color-primary);
-    }
-    .card-body p { margin:0.5rem 0; font-size:0.9rem; color:#555; }
-    .price {
-      font-weight:600; color:var(--color-accent); float:right;
-    }
-    .card-body .details {
-      margin-top:0.8rem; text-align:right;
-    }
-    .card-body .details a { font-size:0.9rem; }
-    /* Galería */
-    .gallery {
-      display:grid; gap:0.8rem;
-      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
-    }
-    .gallery img {
-      width:100%; height:150px; object-fit:cover; border-radius:6px; transition:transform .3s;
-    }
-    .gallery img:hover, .gallery img:focus {
-      transform:scale(1.05);
-    }
-    /* Reserva */
-    .form-group { margin-bottom:1rem; }
-    .form-group label { display:block; margin-bottom:0.3rem; font-weight:600; }
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;
-    }
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline:none; border-color:var(--color-accent);
-    }
-    .reservation-success {
-      background:#e6f4ea; border:1px solid #b2d8c2; color:#2e7d32; padding:1rem; border-radius:6px;
-      margin-top:1rem; display:none;
-    }
-    /* Footer */
+    .card img { height:180px; object-fit:cover; }
+    .card-body { padding:1rem; flex-grow:1; display:flex; flex-direction:column; }
+    .card-body h3 { margin:0 0 .5rem; font-size:1.2rem; color:var(--color-primary); }
+    .card-body p { flex-grow:1; margin:0 0 .5rem; font-size:.9rem; color:#555; }
+    .price { font-weight:700; color:var(--color-accent); text-align:right; }
+    .contact { display:flex; flex-wrap:wrap; gap:2rem; }
+    .contact .info { flex:1 1 300px; }
+    #map { height:300px; width:100%; border-radius:8px; }
     footer {
-      background:var(--color-primary); color:#fff; padding:2rem 1.5rem;
+      background:var(--color-footer); color:#fff; text-align:center; padding:2rem 1rem;
     }
-    .footer-grid {
-      display:grid; gap:1.5rem;
-      grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    .social a { color:#fff; margin:0 .5rem; font-size:1.5rem; }
+    /* Modal */
+    .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6);
+      align-items:center; justify-content:center; z-index:2000; }
+    .modal.active { display:flex; }
+    .modal-content {
+      background:#fff; padding:2rem; border-radius:8px; max-width:400px; width:90%;
+      position:relative;
     }
-    .footer-grid a { color:#fff; }
-    .social-icons a { margin-right:0.8rem; font-size:1.4rem; }
-    @media (max-width:600px) {
-      .hero h1 { font-size:2rem; }
+    .modal-content h3 { margin-top:0; }
+    .modal-content button.close {
+      position:absolute; top:.5rem; right:.5rem; background:none; border:none;
+      font-size:1.5rem; cursor:pointer;
+    }
+    .modal-content form { display:flex; flex-direction:column; gap:.75rem; }
+    .modal-content input, .modal-content select, .modal-content textarea {
+      padding:.5rem; border:1px solid #ccc; border-radius:4px; width:100%;
+    }
+    .modal-content input:focus-visible, .modal-content select:focus-visible, .modal-content textarea:focus-visible {
+      outline:2px solid var(--color-accent);
+    }
+    .modal-content .msg { margin-top:.5rem; font-size:.9rem; }
+    /* Responsive */
+    @media (max-width:768px) {
+      nav ul { display:none; flex-direction:column; background:#fff; position:absolute;
+        top:100%; right:0; width:200px; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+      nav ul.active { display:flex; }
+      .nav-toggle { display:block; }
+      .about { flex-direction:column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition:none !important; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <img src="https://via.placeholder.com/120x40?text=Logo" alt="Logo Casa del Sabor">
-    <nav>
-      <a href="#inicio">Inicio</a>
-      <a href="#menu">Menú</a>
-      <a href="#galeria">Galería</a>
-      <a href="#reserva">Reserva</a>
-      <a href="#contacto">Contacto</a>
-    </nav>
-  </header>
 
-  <main>
-    <!-- HERO / CAROUSEL -->
-    <section id="inicio" class="hero carousel">
-      <img src="https://images.unsplash.com/photo-1555992336-03a23c5c9c3e?auto=format&fit=crop&w=1600&q=80" alt="Interior del restaurante">
-      <div class="overlay">
-        <h1>Casa del Sabor</h1>
-        <p>Tradición y pasión en cada plato</p>
-        <button class="btn" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'});">Ver Menú</button>
-      </div>
-      <button class="prev" aria-label="Imagen anterior" onclick="prevSlide()">&#9664;</button>
-      <button class="next" aria-label="Imagen siguiente" onclick="nextSlide()">&#9658;</button>
-    </section>
+<header>
+  <div class="logo">Restaurante XYZ</div>
+  <button class="nav-toggle" aria-label="Abrir menú"><i class="fas fa-bars"></i></button>
+  <nav>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#sobre-nosotros">Sobre Nosotros</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <!-- MENÚ -->
-    <section id="menu" class="section">
-      <h2>Nuestro Menú</h2>
-      <div class="menu-grid">
-        <!-- Entrantes -->
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=400&q=80" alt="Ensalada de tomate">
-          <div class="card-body">
-            <h3>Ensalada de Tomate <span class="price">8,50 €</span></h3>
-            <p>Tomates frescos, albahaca, aceite de oliva virgen extra.</p>
-            <div class="details"><a href="#" class="btn">Ver más</a></div>
-          </div>
-        </article>
-        <!-- Principales -->
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=400&q=80" alt="Filete a la parrilla">
-          <div class="card-body">
-            <h3>Filete a la Parrilla <span class="price">22,00 €</span></h3>
-            <p>Carne de res de primera, acompañada de verduras asadas.</p>
-            <div class="details"><a href="#" class="btn">Ver más</a></div>
-          </div>
-        </article>
-        <!-- Postres -->
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1551022377-2f5c5c2e5c2b?auto=format&fit=crop&w=400&q=80" alt="Tarta de queso">
-          <div class="card-body">
-            <h3>Tarta de Queso <span class="price">7,00 €</span></h3>
-            <p>Crema ligera sobre base de galleta, toque de frutos rojos.</p>
-            <div class="details"><a href="#" class="btn">Ver más</a></div>
-          </div>
-        </article>
-        <!-- Bebidas -->
-        <article class="card">
-          <img src="https://images.unsplash.com/photo-1510626176961-4b57d4a0c8f5?auto=format&fit=crop&w=400&q=80" alt="Vino tinto">
-          <div class="card-body">
-            <h3>Vino Tinto Casa <span class="price">15,00 €</span></h3>
-            <p>Selección de la bodega local, cuerpo medio, notas frutales.</p>
-            <div class="details"><a href="#" class="btn">Ver más</a></div>
-          </div>
-        </article>
-      </div>
-    </section>
+<main>
+  <!-- HERO -->
+  <section id="inicio" class="hero">
+    <div class="hero-content">
+      <h1>Sabores del Mediterráneo</h1>
+      <p>Cocina mediterránea con ingredientes locales</p>
+      <button class="btn" id="open-reserve">Reservar</button>
+    </div>
+  </section>
 
-    <!-- GALERÍA -->
-    <section id="galeria" class="section">
-      <h2>Galería</h2>
-      <div class="gallery">
-        <img src="https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=400&q=80" alt="Cocina en acción">
-        <img src="https://images.unsplash.com/photo-1541544741938-0af76a6c5c5b?auto=format&fit=crop&w=400&q=80" alt="Comensales disfrutando">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Detalle de plato">
-        <img src="https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=400&q=80" alt="Barra de vinos">
-        <img src="https://images.unsplash.com/photo-1516685304081-3e5c5c5c5c5c?auto=format&fit=crop&w=400&q=80" alt="Terraza al atardecer">
-        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=400&q=80" alt="Postre artesanal">
-      </div>
-    </section>
-
-    <!-- RESERVA -->
-    <section id="reserva" class="section">
-      <h2>Reserva tu Mesa</h2>
-      <form id="bookingForm" novalidate>
-        <div class="form-group">
-          <label for="date">Fecha</label>
-          <input type="date" id="date" name="date" required>
-        </div>
-        <div class="form-group">
-          <label for="time">Hora</label>
-          <input type="time" id="time" name="time" required>
-        </div>
-        <div class="form-group">
-          <label for="guests">Número de comensales</label>
-          <select id="guests" name="guests" required>
-            <option value="">Selecciona</option>
-            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6+</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="name">Nombre</label>
-          <input type="text" id="name" name="name" placeholder="Ej. Ana García" required>
-        </div>
-        <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
-        </div>
-        <div class="form-group">
-          <label for="phone">Teléfono</label>
-          <input type="tel" id="phone" name="phone" placeholder="+34 600 123 456" required>
-        </div>
-        <div class="form-group">
-          <label for="requests">Petición especial</label>
-          <textarea id="requests" name="requests" rows="3" placeholder="Ej. Mesa cerca de la ventana"></textarea>
-        </div>
-        <button type="submit" class="btn">Reservar</button>
-        <div class="reservation-success" id="successMsg">
-          ¡Reserva enviada! Te hemos enviado un correo de confirmación.
-        </div>
-      </form>
-    </section>
-
-    <!-- CONTACTO -->
-    <section id="contacto" class="section">
-      <h2>Contacto</h2>
-      <p>¿Tienes alguna duda? Escríbenos o visítanos.</p>
-      <div style="margin:1rem 0;">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019123456789!2d-0.127758!3d51.507351!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b123456789%3A0x123456789abcdef!2sCasa%20del%20Sabor!5e0!3m2!1ses!2ses!4v1600000000000!5m2!1ses!2ses"
-                width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-      </div>
-      <address>
-        <strong>Casa del Sabor</strong><br>
-        Calle de la Tradición 23, 28001 Madrid, España<br>
-        Tel: <a href="tel:+34912345678">+34 912 345 678</a><br>
-        Email: <a href="mailto:info@casadelsabor.com">info@casadelsabor.com</a>
-      </address>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <h4>Horario</h4>
-        <p>Lun‑Dom: 12:00 – 23:00</p>
-      </div>
-      <div>
-        <h4>Dirección</h4>
-        <p>Calle de la Tradición 23, Madrid</p>
-      </div>
-      <div class="social-icons">
-        <h4>Redes</h4>
-        <a href="#" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
-        <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
-        <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
-      </div>
-      <div>
-        <h4>Suscríbete</h4>
-        <form id="newsletterForm">
-          <input type="email" placeholder="tu@email.com" required style="padding:0.4rem; border-radius:4px; border:none;">
-          <button type="submit" class="btn" style="margin-top:0.5rem;">Suscribir</button>
-        </form>
+  <!-- SOBRE NOSOTROS -->
+  <section id="sobre-nosotros">
+    <h2>Sobre Nosotros</h2>
+    <div class="about">
+      <img src="interior.jpg" alt="Interior del Restaurante XYZ" onerror="this.src='fallback.jpg'">
+      <div class="text">
+        <p>En Restaurante XYZ celebramos la tradición mediterránea con un toque contemporáneo. Cada plato está elaborado con productos frescos de proximidad, seleccionados a mano por nuestro chef.</p>
+        <p>Desde 2015, hemos sido el punto de encuentro de familias y amigos que buscan una experiencia gastronómica auténtica y acogedora.</p>
       </div>
     </div>
-    <p style="text-align:center; margin-top:1rem;">© 2026 Casa del Sabor – Todos los derechos reservados.</p>
-  </footer>
+  </section>
 
-  <!-- Simple carousel & form scripts -->
-  <script>
-    // Carousel logic (3 images)
-    const slides = [
-      "https://images.unsplash.com/photo-1555992336-03a23c5c9c3e?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1528605242005-7c2c5c0c5c8c?auto=format&fit=crop&w=1600&q=80",
-      "https://images.unsplash.com/photo-1516685304081-3e5c5c5c5c5c?auto=format&fit=crop&w=1600&q=80"
-    ];
-    let idx = 0;
-    const heroImg = document.querySelector('.hero img');
+  <!-- MENÚ -->
+  <section id="menu">
+    <h2>Menú</h2>
+    <div id="menu-categories"></div>
+  </section>
 
-    function showSlide(i) {
-      idx = (i + slides.length) % slides.length;
-      heroImg.src = slides[idx];
-    }
-    function nextSlide() { showSlide(idx + 1); }
-    function prevSlide() { showSlide(idx - 1); }
+  <!-- CONTACTO -->
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <div class="contact">
+      <div class="info">
+        <p><strong>Dirección:</strong> Calle Falsa 123, Ciudad</p>
+        <p><strong>Teléfono:</strong> <a href="tel:+34600123456">+34 600 123 456</a></p>
+        <p><strong>Email:</strong> <a href="mailto:info@restaurantexyz.com">info@restaurantexyz.com</a></p>
+        <p><strong>Horario:</strong> Lun-Dom 12:00‑23:00</p>
+      </div>
+      <div id="map" aria-label="Mapa del restaurante"></div>
+    </div>
+  </section>
+</main>
 
-    // Auto‑play (respect prefers‑reduced‑motion)
-    if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
-      setInterval(nextSlide, 8000);
-    }
+<footer>
+  <p>&copy; 2024 Restaurante XYZ – Todos los derechos reservados.</p>
+  <div class="social">
+    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+  </div>
+</footer>
 
-    // Reserva form – simulación de envío
-    const form = document.getElementById('bookingForm');
-    const successMsg = document.getElementById('successMsg');
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      // Aquí se enviaría a la API; simulamos respuesta OK
-      successMsg.style.display = 'block';
+<!-- RESERVATION MODAL -->
+<div class="modal" id="reserve-modal" aria-hidden="true" role="dialog" aria-labelledby="reserve-title">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">&times;</button>
+    <h3 id="reserve-title">Reserva tu mesa</h3>
+    <form id="reserve-form" action="https://formspree.io/f/yourformid" method="POST">
+      <input type="text" name="name" placeholder="Nombre" required>
+      <input type="email" name="_replyto" placeholder="Email" required>
+      <input type="date" name="date" required>
+      <input type="time" name="time" required>
+      <select name="people" required>
+        <option value="" disabled selected>Personas</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option><option>5+</option>
+      </select>
+      <button type="submit" class="btn">Enviar</button>
+      <p class="msg" id="form-msg" aria-live="polite"></p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* ---------- NAVIGATION TOGGLE ---------- */
+const navToggle = document.querySelector('.nav-toggle');
+const navList = document.querySelector('nav ul');
+navToggle.addEventListener('click', () => navList.classList.toggle('active'));
+
+/* ---------- LOAD INFO & MENU ---------- */
+async function loadInfo() {
+  try {
+    const res = await fetch('info.json');
+    const info = await res.json();
+    document.title = `${info.nombre} – ${info.descripcion}`;
+    // hero background
+    document.querySelector('.hero').style.backgroundImage = `url('${info.imagen_portada}')`;
+    // footer social links
+    const socialDiv = document.querySelector('footer .social');
+    socialDiv.innerHTML = `
+      <a href="${info.redes.facebook}" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="${info.redes.instagram}" aria-label="Instagram"><i class="fab fa-instagram"></i></a>`;
+  } catch (e) {
+    console.error('Error cargando info.json', e);
+  }
+}
+async function loadMenu() {
+  try {
+    const res = await fetch('menu.json');
+    const dishes = await res.json();
+    const categories = [...new Set(dishes.map(d=>d.categoria))];
+    const container = document.getElementById('menu-categories');
+    categories.forEach(cat => {
+      const section = document.createElement('section');
+      const h3 = document.createElement('h3');
+      h3.textContent = cat;
+      h3.style.color = 'var(--color-primary)';
+      section.appendChild(h3);
+      const grid = document.createElement('div');
+      grid.className = 'menu-grid';
+      dishes.filter(d=>d.categoria===cat).forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img src="${d.imagen}" alt="${d.nombre}" onerror="this.src='fallback.jpg'">
+          <div class="card-body">
+            <h3>${d.nombre}</h3>
+            <p>${d.descripcion}</p>
+            <div class="price">${d.precio} €</div>
+          </div>`;
+        grid.appendChild(card);
+      });
+      section.appendChild(grid);
+      container.appendChild(section);
+    });
+  } catch (e) {
+    console.error('Error cargando menu.json', e);
+  }
+}
+loadInfo();
+loadMenu();
+
+/* ---------- LEAFLET MAP ---------- */
+const map = L.map('map').setView([41.3851, 2.1734], 15); // coordenadas de ejemplo (Barcelona)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+L.marker([41.3851, 2.1734]).addTo(map)
+  .bindPopup('Restaurante XYZ')
+  .openPopup();
+
+/* ---------- RESERVATION MODAL ---------- */
+const modal = document.getElementById('reserve-modal');
+const openBtn = document.getElementById('open-reserve');
+const closeBtn = modal.querySelector('.close');
+openBtn.addEventListener('click', () => {
+  modal.classList.add('active');
+  modal.setAttribute('aria-hidden','false');
+});
+closeBtn.addEventListener('click', () => {
+  modal.classList.remove('active');
+  modal.setAttribute('aria-hidden','true');
+});
+window.addEventListener('keydown', e => {
+  if(e.key==='Escape' && modal.classList.contains('active')) closeBtn.click();
+});
+
+/* ---------- FORM SUBMISSION ---------- */
+const form = document.getElementById('reserve-form');
+const msg = document.getElementById('form-msg');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+  const data = new FormData(form);
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      msg.textContent = '¡Reserva enviada! Te contactaremos pronto.';
+      msg.style.color = 'green';
       form.reset();
-    });
-
-    // Newsletter (solo muestra alerta)
-    document.getElementById('newsletterForm').addEventListener('submit', e => {
-      e.preventDefault();
-      alert('¡Gracias por suscribirte!');
-    });
-  </script>
-  <!-- Font Awesome (solo para íconos) -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    } else {
+      throw new Error('Error en el envío');
+    }
+  } catch (err) {
+    msg.textContent = 'Hubo un problema al enviar la reserva. Inténtalo más tarde.';
+    msg.style.color = 'red';
+  }
+});
+</script>
 </body>
 </html>
